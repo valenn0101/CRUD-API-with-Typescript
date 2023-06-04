@@ -4,6 +4,7 @@ import express, {
   type Response,
   type NextFunction
 } from "express";
+import routes from "./v1/routes/index-route.js";
 import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
@@ -15,7 +16,7 @@ class App {
     this.app = express();
     this.config();
     this.middlewares();
-    // this.routes();
+    this.routes();
   }
 
   private config(): void {
@@ -42,7 +43,7 @@ class App {
   }
 
   private routes(): void {
-    this.app.use("/api/v1/crud/"); // routes)
+    this.app.use("/api/v1/crud/", routes);
   }
 }
 
