@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model brands {
+  ID          Int        @id
+  Name        String?    @db.VarChar(255)
+  Description String?    @db.VarChar(255)
+  logo_url    String?    @db.VarChar(255)
+  products    products[]
+}
+
+model products {
+  ID                   Int      @id
+  Name                 String?  @db.VarChar(255)
+  Description          String?  @db.VarChar(255)
+  Image_url            String?  @db.VarChar(255)
+  Price                Decimal? @db.Decimal(10, 2)
+  discounted           Boolean?
+  discountedPercentage Decimal? @db.Decimal(5, 2)
+  stock                Int?
+  brand                Int?
+  brands               brands?  @relation(fields: [brand], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "products_ibfk_1")
+
+  @@index([brand], map: "brand")
+}
