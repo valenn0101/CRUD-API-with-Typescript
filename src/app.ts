@@ -4,7 +4,7 @@ import express, {
   type Response,
   type NextFunction
 } from "express";
-import routes from "./v1/routes/index-route.js";
+import router from "./v1/routes/index.js";
 import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
@@ -16,11 +16,15 @@ class App {
     this.app = express();
     this.config();
     this.middlewares();
-    this.routes();
+    this.router();
   }
 
   private config(): void {
-    // this.app.use(cors());
+    this.app.use(
+      cors({
+        origin: "*"
+      })
+    );
     this.app.use(cookieParser());
     this.app.use(express.json());
     this.app.use(bodyParser.json());
@@ -42,8 +46,8 @@ class App {
     });
   }
 
-  private routes(): void {
-    this.app.use("/api/v1/crud/", routes);
+  private router(): void {
+    this.app.use("/api/v1/", router);
   }
 }
 
