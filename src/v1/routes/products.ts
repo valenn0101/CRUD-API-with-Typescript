@@ -1,14 +1,18 @@
+import { Router } from "express";
 import {
-  Router,
-  type Request,
-  type Response,
-  type NextFunction
-} from "express";
+  deleteProduct,
+  getProduct,
+  getProducts,
+  postProduct,
+  updateProduct
+} from "../../controllers/products";
 
 const router = Router();
 
-router.get("/", (req: Request, res: Response, next: NextFunction) => {
-  res.send({ data: "products" });
-});
+router.get("/", getProducts);
+router.get("/:id", getProduct);
+router.post("/", postProduct);
+router.put("/:id", updateProduct);
+router.delete("/:id", deleteProduct);
 
 export { router };

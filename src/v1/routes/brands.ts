@@ -1,23 +1,18 @@
+import { Router } from "express";
 import {
-  Router,
-  type Request,
-  type Response,
-  type NextFunction
-} from "express";
-import prisma from "../../config/prisma";
+  deleteBrand,
+  getBrand,
+  getBrands,
+  postBrand,
+  updateBrand
+} from "../../controllers/brands";
 
 const router = Router();
 
-router.get(
-  "/",
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const brands = await prisma.brands.findMany();
-      res.status(200).json({ brands, message: "These are the brands" });
-    } catch (error) {
-      next(error);
-    }
-  }
-);
+router.get("/", getBrands);
+router.get("/:id", getBrand);
+router.post("/", postBrand);
+router.put("/:id", updateBrand);
+router.delete("/:id", deleteBrand);
 
 export { router };
