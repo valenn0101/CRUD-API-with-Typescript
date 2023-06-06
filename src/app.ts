@@ -32,16 +32,16 @@ class App {
 
   private middlewares(): void {
     this.app.use((req: Request, res: Response, next: NextFunction) => {
-      res.header("Access-Control-Allow-Origin");
-      res.header(
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader(
         "Access-Control-Allow-Methods",
         "GET, POST, PUT, DELETE, OPTIONS"
       );
-      res.header(
+      res.setHeader(
         "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content-Type, Accept, Authorization, Set-Cookie"
       );
-      res.header("Access-Control-Allow-Credentials", "true");
+      res.setHeader("Access-Control-Allow-Credentials", "true");
       next();
     });
   }

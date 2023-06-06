@@ -9,7 +9,26 @@ class BaseService<T> {
     this.model = model;
   }
 
-  async getItem(id: number): Promise<T> {}
+  async getItem(ID: number): Promise<T> {
+    if (this.model === "products") {
+      const product = await prisma.products.findUnique({
+        where: {
+          ID
+        },
+        include: {
+          brands: true
+        }
+      });
+      return product as unknown as T;
+    } else {
+      const item = await prisma.brands.findUnique({
+        where: {
+          ID
+        }
+      });
+      return item as unknown as T;
+    }
+  }
 
   async getItems(): Promise<T[]> {
     if (this.model === "products") {
@@ -29,7 +48,21 @@ class BaseService<T> {
 
   async updateItem(id: number, itemData: T): Promise<T> {}
 
-  async deleteItem(id: number): Promise<void> {}
+  async deleteItem(ID: number): Promise<void> {
+    if (this.model === "products") {
+      await prisma.products.delete({
+        where: {
+          ID
+        }
+      });
+    } else {
+      await prisma.brands.delete({
+        where: {
+          ID
+        }
+      });
+    }
+  }
 }
 
 export default BaseService;
