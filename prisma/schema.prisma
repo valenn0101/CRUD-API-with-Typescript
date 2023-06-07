@@ -8,22 +8,22 @@ datasource db {
 }
 
 model brands {
-  ID          Int        @id
-  Name        String?    @db.VarChar(255)
-  Description String?    @db.VarChar(255)
-  logo_url    String?    @db.VarChar(255)
+  ID          Int       @id @default(autoincrement())
+  Name        String    @db.VarChar(255)
+  Description String    @db.VarChar(255)
+  logo_url    String    @db.VarChar(255)
   products    products[]
 }
 
 model products {
-  ID                   Int      @id
-  Name                 String?  @db.VarChar(255)
-  Description          String?  @db.VarChar(255)
-  Image_url            String?  @db.VarChar(255)
-  Price                Decimal? @db.Decimal(10, 2)
-  discounted           Boolean?
-  discountedPercentage Decimal? @db.Decimal(5, 2)
-  stock                Int?
+  ID                   Int      @id @default(autoincrement())
+  Name                 String   @db.VarChar(255)
+  Description          String   @db.VarChar(255)
+  Image_url            String   @db.VarChar(255)
+  Price                Decimal  @db.Decimal(10, 2)
+  discounted           Boolean
+  discountedPercentage Decimal  @db.Decimal(5, 2)
+  stock                Int
   brand                Int?
   brands               brands?  @relation(fields: [brand], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "products_ibfk_1")
 
