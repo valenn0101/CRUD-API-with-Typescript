@@ -1,6 +1,8 @@
 import { type Request, type Response } from "express";
 import { handleHttp } from "../utils/error.handle";
 import BaseService from "../services/baseService";
+import { type Products } from "../interfaces/interface";
+import validateFormData from "../utils/validate.form";
 
 const productService = new BaseService<"products">("products");
 
@@ -25,8 +27,17 @@ const getProducts = async (req: Request, res: Response): Promise<void> => {
 
 const postProduct = async (req: Request, res: Response): Promise<void> => {
   try {
+    const formData: Products = req.body;
+    if (validateFormData(formData)) {
+      const createdProduct = await productService.createItem(formData);
+      res.status(201).json(createdProduct);
+    } else {
+      res
+        .status(400)
+        .json({ error: "Missing required data in the request body" });
+    }
   } catch (e) {
-    handleHttp(res, "Error post Product");
+    handleHttp(res, "Error post Product, check your data");
   }
 };
 

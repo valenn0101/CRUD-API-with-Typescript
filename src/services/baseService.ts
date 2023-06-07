@@ -1,4 +1,5 @@
 import { PrismaClient, type Prisma } from "@prisma/client";
+import { type Brands, type Products } from "../interfaces/interface";
 
 const prisma = new PrismaClient();
 
@@ -24,6 +25,9 @@ class BaseService<T> {
       const item = await prisma.brands.findUnique({
         where: {
           ID
+        },
+        include: {
+          products: true
         }
       });
       return item as unknown as T;
@@ -39,12 +43,32 @@ class BaseService<T> {
       });
       return products as unknown as T[];
     } else {
-      const items = await prisma.brands.findMany();
+      const items = await prisma.brands.findMany({
+        include: {
+          products: true
+        }
+      });
       return items as unknown as T[];
     }
   }
 
-  async createItem(itemData: T): Promise<T> {}
+  async createItem(itemData: T): Promise<T> {
+    const data = itemData as Products | Brands;
+
+    let createdItem;
+
+    if (this.model === "products") {
+      createdItem = await prisma.products.create({
+        data: data as Products
+      });
+    } else {
+      createdItem = await prisma.brands.create({
+        data: data as Brands
+      });
+    }
+
+    return createdItem;
+  }
 
   async updateItem(id: number, itemData: T): Promise<T> {}
 

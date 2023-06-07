@@ -1,6 +1,8 @@
 import { type Request, type Response } from "express";
 import { handleHttp } from "../utils/error.handle";
 import BaseService from "../services/baseService";
+import { type Brands } from "../interfaces/interface";
+import validateFormData from "../utils/validate.form";
 
 const brandService = new BaseService<"brands">("brands");
 
@@ -25,8 +27,15 @@ const getBrands = async (req: Request, res: Response): Promise<void> => {
 
 const postBrand = async (req: Request, res: Response): Promise<void> => {
   try {
+    const formData: Brands = req.body;
+    if (validateFormData(formData)) {
+      const createdBrand = await brandService.createItem(formData);
+      res.status(201).json(createdBrand);
+    } else {
+      res.status(400).json({ error: "Invalid data" });
+    }
   } catch (e) {
-    handleHttp(res, "Error post Brand");
+    handleHttp(res, "Error post Brand, check your data");
   }
 };
 
