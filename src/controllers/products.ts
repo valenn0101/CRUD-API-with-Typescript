@@ -36,8 +36,8 @@ const postProduct = async (req: Request, res: Response): Promise<void> => {
         .status(400)
         .json({ error: "Missing required data in the request body" });
     }
-  } catch (e) {
-    handleHttp(res, "Error post Product, check your data");
+  } catch (error) {
+    handleHttp(res, error.toString());
   }
 };
 
@@ -53,8 +53,8 @@ const deleteProduct = async (req: Request, res: Response): Promise<void> => {
   try {
     const product = await productService.deleteItem(productId);
     res.status(200).send({ message: `Deleted Product ${productId}`, product });
-  } catch (e) {
-    handleHttp(res, "Error delete Product");
+  } catch (error) {
+    handleHttp(res, error.toString());
   }
 };
 

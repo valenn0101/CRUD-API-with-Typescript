@@ -34,8 +34,8 @@ const postBrand = async (req: Request, res: Response): Promise<void> => {
     } else {
       res.status(400).json({ error: "Invalid data" });
     }
-  } catch (e) {
-    handleHttp(res, "Error post Brand, check your data");
+  } catch (error) {
+    handleHttp(res, error.toString());
   }
 };
 
