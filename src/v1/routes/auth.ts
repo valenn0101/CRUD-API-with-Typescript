@@ -4,11 +4,11 @@ import {
   type Response,
   type NextFunction
 } from "express";
+import { loginController, createUserController } from "../../controllers/auth";
 
 const router = Router();
 
-router.get("/", (req: Request, res: Response, next: NextFunction) => {
-  res.send({ data: "auth" });
-});
+router.post("/register", createUserController);
+router.post("/login", loginController);
 
 export { router };
