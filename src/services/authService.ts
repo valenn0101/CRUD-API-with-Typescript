@@ -1,7 +1,8 @@
 import prisma from "../config/prisma";
 import type Auth from "../interfaces/auth.interface";
+import { encrypt, verified } from "../utils/bcrypt.handle";
 
-export const createUser = async (userData: Auth): Promise<User> => {
+const createUser = async (userData: Auth): Promise<User> => {
   const existingEmails = await prisma.users.findMany({
     select: {
       email: true
@@ -13,18 +14,39 @@ export const createUser = async (userData: Auth): Promise<User> => {
   );
 
   if (emailExists) {
-    console.log("El email ya está registrado en la base de datos");
-    throw new Error("El email ya está registrado en la base de datos");
+    return "El email ya está registrado en la base de datos";
   }
-
+  const passHash = await encrypt(userData.password);
   const createdUser = await prisma.users.create({
     data: {
       email: userData.email,
       username: userData.username,
-      password: userData.password
+      password: passHash
     }
   });
 
-  console.log("Usuario creado", createdUser);
   return createdUser;
 };
+
+const loginUser = async (email, password) => {
+  const checkUser = await prisma.users.findFirst({
+    where: {
+      email
+    }
+  });
+
+  if (checkUser == null) {
+    return { false: "User not found" };
+  }
+
+  const passwordHash = checkUser.password;
+  const isCorrect = await verified(password, passwordHash);
+
+  if (!isCorrect) {
+    return { false: "Incorrect password " };
+  }
+
+  return checkUser;
+};
+
+export { createUser, loginUser };
