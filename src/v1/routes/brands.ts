@@ -6,13 +6,14 @@ import {
   postBrand,
   updateBrand
 } from "../../controllers/brands";
+import checkJWT from "../../middlewares/session";
 
 const router = Router();
 
 router.get("/", getBrands);
 router.get("/:id", getBrand);
-router.post("/", postBrand);
-router.put("/:id", updateBrand);
-router.delete("/:id", deleteBrand);
+router.post("/", checkJWT, postBrand);
+router.put("/:id", checkJWT, updateBrand);
+router.delete("/:id", checkJWT, deleteBrand);
 
 export { router };

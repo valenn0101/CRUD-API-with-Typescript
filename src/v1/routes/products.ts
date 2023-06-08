@@ -6,13 +6,14 @@ import {
   postProduct,
   updateProduct
 } from "../../controllers/products";
+import checkJWT from "../../middlewares/session";
 
 const router = Router();
 
 router.get("/", getProducts);
 router.get("/:id", getProduct);
-router.post("/", postProduct);
-router.put("/:id", updateProduct);
-router.delete("/:id", deleteProduct);
+router.post("/", checkJWT, postProduct);
+router.put("/:id", checkJWT, updateProduct);
+router.delete("/:id", checkJWT, deleteProduct);
 
 export { router };
