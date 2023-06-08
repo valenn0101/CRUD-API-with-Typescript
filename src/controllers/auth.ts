@@ -23,10 +23,14 @@ const createUserController = async (
 const loginController = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
   const userLogin = await loginUser(email, password);
-  if (userLogin === false) {
+
+  if (userLogin.hasOwnProperty("false")) {
     res.status(403).send(userLogin);
   } else {
-    res.status(200).json(userLogin);
+    res.status(200).json({
+      token: userLogin.token,
+      user: userLogin.user.email
+    });
   }
 };
 

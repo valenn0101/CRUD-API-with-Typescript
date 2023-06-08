@@ -1,3 +1,4 @@
+import { generateToken } from "../utils/jwt.handle";
 import prisma from "../config/prisma";
 import type Auth from "../interfaces/auth.interface";
 import { encrypt, verified } from "../utils/bcrypt.handle";
@@ -14,7 +15,7 @@ const createUser = async (userData: Auth): Promise<User> => {
   );
 
   if (emailExists) {
-    return "El email ya está registrado en la base de datos";
+    return "The email is already registered in the database";
   }
   const passHash = await encrypt(userData.password);
   const createdUser = await prisma.users.create({
@@ -46,7 +47,12 @@ const loginUser = async (email, password) => {
     return { false: "Incorrect password " };
   }
 
-  return checkUser;
+  const token = generateToken(checkUser.email);
+  const data = {
+    token,
+    user: checkUser
+  };
+  return data;
 };
 
 export { createUser, loginUser };
