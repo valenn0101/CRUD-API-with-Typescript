@@ -27,7 +27,9 @@ const getBrands = async (req: Request, res: Response): Promise<void> => {
 
 const postBrand = async (req: Request, res: Response): Promise<void> => {
   try {
+    const file = req.file;
     const formData: Brands = req.body;
+    formData.logo_url = file.path;
     if (validateFormData(formData)) {
       const createdBrand = await brandService.createItem(formData);
       res.status(201).json(createdBrand);
@@ -40,14 +42,36 @@ const postBrand = async (req: Request, res: Response): Promise<void> => {
 };
 
 const updateBrand = async (req: Request, res: Response): Promise<void> => {
+  const brandId = Number(req.params.id);
   try {
-  } catch (e) {
-    handleHttp(res, "Error update Brand");
+    const existingBrand = await brandService.getItem(brandId);
+    if (!existingBrand) {
+      res.status(404).json({ error: "Brand not found" });
+      return;
+    }
+
+    const file = req.file;
+    const formData: Brands = req.body;
+    if (file != null) {
+      formData.logo_url = file.path;
+    }
+
+    if (validateFormData(formData)) {
+      const updatedBrand = await brandService.updateItem(brandId, formData);
+      res.status(200).json(updatedBrand);
+    } else {
+      res.status(400).json({ error: "Invalid data" });
+    }
+  } catch (error) {
+    handleHttp(res, error.toString());
   }
 };
 
 const deleteBrand = async (req: Request, res: Response): Promise<void> => {
+  const brandId = Number(req.params.id);
   try {
+    const brand = await brandService.deleteItem(brandId);
+    res.status(200).send({ message: `Deleted Brand ${brandId}`, brand });
   } catch (e) {
     handleHttp(res, "Error delete Brand");
   }

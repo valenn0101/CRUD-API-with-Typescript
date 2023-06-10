@@ -67,10 +67,38 @@ class BaseService<T> {
       });
     }
 
-    return createdItem;
+    return createdItem as unknown as T;
   }
 
-  async updateItem(id: number, itemData: T): Promise<T> {}
+  async updateItem(id: number, itemData: T): Promise<T> {
+    const data = itemData as Products | Brands;
+
+    let updatedItem;
+
+    if (this.model === "products") {
+      updatedItem = await prisma.products.update({
+        where: {
+          ID: id
+        },
+        data: data as Products,
+        include: {
+          brands: true
+        }
+      });
+    } else {
+      updatedItem = await prisma.brands.update({
+        where: {
+          ID: id
+        },
+        data: data as Brands,
+        include: {
+          products: true
+        }
+      });
+    }
+
+    return updatedItem as unknown as T;
+  }
 
   async deleteItem(ID: number): Promise<void> {
     if (this.model === "products") {

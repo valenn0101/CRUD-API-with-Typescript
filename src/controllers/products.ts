@@ -27,7 +27,9 @@ const getProducts = async (req: Request, res: Response): Promise<void> => {
 
 const postProduct = async (req: Request, res: Response): Promise<void> => {
   try {
+    const file = req.file;
     const formData: Products = req.body;
+    formData.Image_url = file.path;
     if (validateFormData(formData)) {
       const createdProduct = await productService.createItem(formData);
       res.status(201).json(createdProduct);
@@ -42,9 +44,33 @@ const postProduct = async (req: Request, res: Response): Promise<void> => {
 };
 
 const updateProduct = async (req: Request, res: Response): Promise<void> => {
+  const productId = Number(req.params.id);
   try {
-  } catch (e) {
-    handleHttp(res, "Error update Product");
+    const existingProduct = await productService.getItem(productId);
+    if (!existingProduct) {
+      res.status(404).json({ error: "Product not found" });
+      return;
+    }
+
+    const file = req.file;
+    const formData: Products = req.body;
+    if (file != null) {
+      formData.Image_url = file.path;
+    }
+
+    if (validateFormData(formData)) {
+      const updatedProduct = await productService.updateItem(
+        productId,
+        formData
+      );
+      res.status(200).json(updatedProduct);
+    } else {
+      res
+        .status(400)
+        .json({ error: "Missing required data in the request body" });
+    }
+  } catch (error) {
+    handleHttp(res, error.toString());
   }
 };
 
