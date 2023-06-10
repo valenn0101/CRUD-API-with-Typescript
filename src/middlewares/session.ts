@@ -10,7 +10,6 @@ const checkJWT = (req: Request, res: Response, next: NextFunction) => {
     if (!userVerify) {
       res.status(401).send("JWT No valid");
     }
-    console.log({ jwt });
     next();
   } catch (e) {
     res.status(400).send("Sesssion no valid");

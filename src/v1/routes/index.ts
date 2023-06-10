@@ -4,7 +4,7 @@ import { readdirSync } from "fs";
 const PATH_TO_ROUTES = "src/v1/routes";
 const router = Router();
 
-const removeFileExtension = (fileName: string) => {
+const removeFileExtension = (fileName: string): string | undefined => {
   const file = fileName.split(".").shift();
   return file ?? "";
 };
@@ -20,7 +20,7 @@ try {
     }
 
     // Import and use the router from the module
-    const importRoute = async () => {
+    const importRoute = async (): Promise<void> => {
       try {
         const moduleRouter = await import(`./${routeName}`);
         if (!moduleRouter?.router) {

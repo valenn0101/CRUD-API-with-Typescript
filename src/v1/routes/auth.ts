@@ -1,9 +1,4 @@
-import {
-  Router,
-  type Request,
-  type Response,
-  type NextFunction
-} from "express";
+import { Router } from "express";
 import { loginController, createUserController } from "../../controllers/auth";
 
 const router = Router();
