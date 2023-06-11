@@ -53,7 +53,7 @@ const updateProduct = async (req: Request, res: Response): Promise<void> => {
     }
 
     const file = req.file;
-    const formData: Products = req.body;
+    const formData: Products | any = req.body;
     if (file != null) {
       formData.Image_url = file.path;
     }
