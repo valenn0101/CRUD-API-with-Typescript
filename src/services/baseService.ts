@@ -52,18 +52,18 @@ class BaseService<T> {
     }
   }
 
-  async createItem(itemData: T): Promise<T> {
-    const data = itemData as Products | Brands;
+  async createItem(itemData): Promise<T> {
+    const data = itemData;
 
     let createdItem;
 
     if (this.model === "products") {
       createdItem = await prisma.products.create({
-        data: data as Products
+        data
       });
     } else {
       createdItem = await prisma.brands.create({
-        data: data as Brands
+        data
       });
     }
 

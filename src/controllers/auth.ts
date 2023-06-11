@@ -17,7 +17,6 @@ const createUserController = async (
       .status(400)
       .json({ error: "Missing required data in the request body" });
   }
-  handleHttp(res, error.toString());
 };
 
 const loginController = async (req: Request, res: Response): Promise<void> => {

@@ -12,7 +12,7 @@ interface Products {
   discounted: boolean;
   discountedPercentage?: number;
   stock: number;
-  brand: number;
+  brand?: number;
 }
 
 export type { Brands, Products };

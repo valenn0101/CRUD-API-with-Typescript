@@ -51,7 +51,7 @@ const updateBrand = async (req: Request, res: Response): Promise<void> => {
     }
 
     const file = req.file;
-    const formData: Brands = req.body;
+    const formData: Brands | any = req.body;
     if (file != null) {
       formData.logo_url = file.path;
     }

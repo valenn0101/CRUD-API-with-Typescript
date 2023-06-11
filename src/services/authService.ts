@@ -3,7 +3,7 @@ import prisma from "../config/prisma";
 import type Auth from "../interfaces/auth.interface";
 import { encrypt, verified } from "../utils/bcrypt.handle";
 
-const createUser = async (userData: Auth): Promise<Auth | string> => {
+const createUser = async (userData: Auth): Promise<any> => {
   const existingEmails = await prisma.users.findMany({
     select: {
       email: true
@@ -29,10 +29,7 @@ const createUser = async (userData: Auth): Promise<Auth | string> => {
   return createdUser;
 };
 
-const loginUser = async (
-  email: string,
-  password: string
-): Promise<Auth | string> => {
+const loginUser = async (email: string, password: string): Promise<any> => {
   const checkUser = await prisma.users.findFirst({
     where: {
       email
